@@ -1,0 +1,18 @@
+#client monit install script
+echo "Installing epel-release"
+yum install -y epel-release
+
+echo "Installing monit"
+yum install -y monit
+
+mv client_monitrc /etc/monitrc 
+echo "set alert root@$1" >> /etc/monitrc 
+
+echo "*.*@$1" >> /etc/rsyslog.conf
+
+firewall-cmd --zone=public --add-port=514/udp --permanent
+firewall-cmd --zone=public --add-port=2812/tcp --permanent
+firewall-cmd --reload
+
+systemctl restart rsyslog
+systemctl restart monit
