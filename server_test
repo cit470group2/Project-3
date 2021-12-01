@@ -1,0 +1,32 @@
+#client test file
+echo "Testing Apache"
+systemctl stop httpd
+sleep 130
+monit summary | grep apache
+
+echo "Testing SSH"
+systemctl stop sshd
+sleep 130
+monit summary | grep SSH
+
+echo "Testing SYSLOG"
+systemctl stop rsyslog
+sleep 130
+monit summary | grep SYSLOG
+
+echo "Testing LDAP"
+systemctl stop slapd
+sleep 130
+monit summary | grep LDAP
+
+echo "Testing NFS"
+systemctl stop nfs
+sleep 130
+monit summary | grep NFS
+
+echo "Testing Disk Usage"
+dd if=/dev/zero of=/dev/diskhog bs=1M count=100000
+sleep 60
+monit summary | grep root
+monit summary | grep var
+rm /dev/diskhog -f
